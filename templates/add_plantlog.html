@@ -1,0 +1,35 @@
+{% if rowid is not defined %}
+<h4>Global Settings</h4>
+<p><input type=hidden name="globaldate" id="globaldatefield" class="datefield" /><a href="#" class="operation_btn" id="globaldate" class="datefield hasDatepicker"><i class="fas fa-calendar-day" style="margin-right:.2em"></i>Set Date</a>  <a href="#" class="operation_btn" id="globalwater"><i class="fas fa-fill-drip" style="margin-right:.2em"></i>Water All</a>  <span href="#" class="operation_btn" id="globalnutrient"><i class="fas fa-{{icons['nutrients']}}" style="margin-right:.2em"></i>Nutrient {{ form.nutrient_ID(id="global_nutrient_ID"|escape) }}</span>  <span href="#" class="operation_btn" id="globalrepellent"><i class="fas fa-{{icons['repellents']}}" style="margin-right:.2em"></i>Repellent {{ form.repellent_ID(id="global_repellent_ID"|escape) }}</span>  <span class="operation_btn" id="globalstage"><i class="fas fa-leaf" style="margin-right:.2em"></i>Stage {{ form.stage(id="global_stage"|escape) }}</span> </p>
+<h4>Environment</h4>
+<form action="/environment/log/new" method="POST" class="logform" id="environment_log_form" >
+<p><input type=hidden name="logdate" id="envlogdatefield" class="datefield" /> <span href="#" class="operation_btn" id="globalenv"><i class="fas fa-{{icons['environments']}}" style="margin-right:.2em"></i>Environment {{ form.environment_ID(id="global_environment_ID"|escape) }}</span>  <span class="operation_btn" id="envtemp"><i class="fas fa-{{icons['temp']}}" style="margin-right:.2em"></i>Temperature {{ envform.temperature(id="env_temp"|escape) }}</span>  <span class="operation_btn" id="envhumidity"><i class="fas fa-{{icons['humidity']}}" style="margin-right:.2em"></i>Humidity {{ envform.humidity(id="env_humidity"|escape) }}</span>  <span class="operation_btn" id="envlux"><i class="fas fa-{{icons['lux']}}" style="margin-right:.2em"></i>Lux {{ envform.lux(id="env_lux"|escape) }}</span>  <span class="operation_btn" id="envlight"><i class="fas fa-{{icons['light']}}" style="margin-right:.2em"></i>Light {{ envform.light(id="env_light"|escape) }}</span>  <span class="operation_btn" id="envdark"><i class="fas fa-{{icons['dark']}}" style="margin-right:.2em"></i>Dark {{ envform.dark(id="env_dark"|escape) }}</span>  <input type="Submit" value="Set Environment Log"></p>
+</form>
+{% endif %}
+
+{% for row in rows %}
+<form action="{{action}}" method="POST" class="logform" id="log_form-{{ row['plant_ID'] }}" >
+  {{form.csrf}}
+<div class="input text"><h3>{{ row['name'] }}</h3></div>
+<div id="log_item_{{row['plant_ID']}}" class="log_row">
+  <div class="input log">{{ form.logdate.label }} {{ form.logdate(class_="datefield",id="logdate-"+row['id']|escape )  }}</div>
+  <div class="input log">{{ form.water.label }} {{ form.water(value=1,class="watercheck",id="water-"+row['id']|escape) }}</div>
+  <div class="input log">{{ form.height.label }} {{ form.height(id="height-"+row['id']|escape) }}</div>
+  <div class="input log">{{ form.span.label }} {{ form.span(id="span-"+row['id']|escape) }}</div>
+  <div class="input log">{{ form.nodes.label }} {{ form.nodes(id="nodes-"+row['id']|escape) }}</div>
+  <div class="input log">{{ form.environment_ID.label }} {{ form.environment_ID(class_="environmentfield", id="environment_ID-"+row['id']|escape) }}</div>
+  <div class="input log">{{ form.nutrient_ID.label }} {{ form.nutrient_ID(class_="nutrientfield", id="nutrient_ID-"+row['id']|escape) }}</div>
+  <div class="input log">{{ form.repellent_ID.label }} {{ form.repellent_ID(class_="repellentfield", id="repellent_ID-"+row['id']|escape) }}</div>
+  <div class="input log">{{ form.stage.label }} {{ form.stage(class_="stagefield") }}</div>
+  <div class="input log">{{ form.trim.label }} {{ form.trim(value=1) }}</div>
+  <div class="input log">{{ form.soil_pH.label }} {{ form.soil_pH }}</div>
+  <div class="input log">{{ form.transplant.label }} {{ form.transplant(value=1)}}</div>
+  <div class="input log">{{ form.notes.label }} {{ form.notes }}</div>
+  <div class="input log submit">{{ form.plant_ID(value=row['plant_ID']) }}<input type="submit" value="Submit"></div>
+</div>
+{% if rowid is defined %}
+{{ form.id }}
+{% endif %}
+</form>
+
+{% endfor %}

@@ -1,0 +1,24 @@
+{% include 'header_print.html' %}
+<h2 class="page_header"><i class="fas fa-{{icon}}" style="margin-right:.2em"></i>Daily Log</h2>
+<table id="print_environment">
+	<tr>
+			<td><strong>Log Date:</strong></td>
+			<td><div class="box"></td>
+			<td><strong>Environment</strong></td>
+			<td><div class="box"></td>
+			<td><strong>Temperature</strong></td>
+			<td><div class="box"></td>
+			<td><strong>Humidity</strong></td>
+			<td><div class="box"></td>
+			<td><strong>Light</strong></td>
+			<td><div class="box"></td>
+		</tr>
+	</table>
+
+{{ table }}
+<script>
+	$(document).ready(function(){
+		window.print()
+	})
+</script>
+{% include 'footer.html' %}

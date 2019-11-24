@@ -1,0 +1,30 @@
+<form action="" method="post">
+            {{form.csrf}}
+<div class="input text">
+                {{ form.name.label }} {{ form.name }}</div>
+<div class="input select">
+                {{ form.location.label }} {{ form.location }}</div>
+<div class="input text">
+                {{ form.grow_area.label }} {{ form.grow_area }}</div>
+<div class="input text">
+                {{ form.containment.label }} {{ form.containment }}</div>
+<div class="input text">
+                {{ form.max_plants.label }} {{ form.max_plants }}</div>
+<div class="input text">
+                {{ form.temperature.label }} {{ form.temperature }}</div>
+<div class="input text">
+                {{ form.humidity.label }} {{ form.humidity }}</div>
+<div class="input text">
+                {{ form.light_hours.label }} {{ form.light_hours }}</div>
+<div class="input text">
+                {{ form.light_source.label }} {{ form.light_source }}</div>
+<div class="input text">
+                {{ form.lumens.label }} {{ form.lumens }}</div>
+<div class="input text">
+                {{ form.wattage.label }} {{ form.wattage }}</div>
+<div class="input submit">
+  {% if row['id'] %}
+  <input type=hidden name=id value="{{row['id']}}" />
+  {% endif %}
+                <input type="submit" value="Submit"></div>
+</form>

@@ -1,0 +1,19 @@
+{% include 'header.html' %}
+<div id="login">
+  <img src="{{ url_for('static',filename='images/logo.png') }}" />
+  <div id="loginform">
+  <form action="/login" method="post">
+              {{form.csrf}}
+  <div class="input text">
+                  {{ form.username.label }} {{ form.username }}</div>
+  <div class="input text">
+                  {{ form.password.label }} {{ form.password }}</div>
+  <div class="input text">
+    {% if referrer != None %}
+    <input type="hidden" name="redirect" value="{{referrer}}" />
+    {% endif %}
+                  <input type="submit" value="Log in" /></div>
+  </form>
+  </div>
+</div>
+{% include 'footer.html' %}

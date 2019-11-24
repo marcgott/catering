@@ -1,0 +1,14 @@
+{% include 'header.html' %}
+<h2 class="page_header"><i class="fas fa-{{icon}}" style="margin-right:.2em"></i>{{ title_verb }} {{ operation }}</h2>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<ul>
+{% for message in messages %}
+ 	<li class="{{message[0]}}"><i class="fas fa-{{icon}}"></i> {{ message[1] }}</li>
+{% endfor %}</ul>
+{% endif %}
+{% endwith %}
+
+{% include formpage %}
+
+{% include 'footer.html' %}

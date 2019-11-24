@@ -1,0 +1,71 @@
+{% include 'header.html' %}
+<div id="install">
+  <div id="logo"><img src="{{ url_for('static',filename='images/logo.png') }}" /></div>
+
+  <div id="installform">
+    <p>Welcome to {{ program_name }}. In order to get started using {{program_name}}, we need to set up a database so we can store the information about your plants. You should have received the following information from your hosting company, or created it yourself if you're a developer. Go ahead and enter your information now. </p>
+  <form action="/install" id="database_credentials" method="POST">
+              {{dbcredform.csrf}}
+  <div id="dbhost_row" class="install text">
+                  {{ dbcredform.dbhost.label }} {{ dbcredform.dbhost }}</div>
+  <div class="install text info">The <em>Host</em> is the Database Server IP address or domain name supplied by your hosting company. It should be <strong>localhost</strong> if you're setting {{program_name}} up on your personal computer.</div>
+
+  <div id="dbuname_row" class="install text">
+                  {{ dbcredform.dbuname.label }} {{ dbcredform.dbuname }}</div>
+  <div class="install text info">This is your user name for the database, <em>not</em> your hosting account.</div>
+
+  <div id="dbpass_row" class="install text">
+                  {{ dbcredform.dbpass.label }} {{ dbcredform.dbpass }}</div>
+  <div class="install text info">This is your user password for the database, <em>not</em> your hosting account.</div>
+
+  <div id="dbpass_name" class="install text">
+                  {{ dbcredform.dbname.label }} {{ dbcredform.dbname }}</div>
+  <div class="install text info">the <em>Name</em> is the name of your database. Some hosting companies like to auto-generate a weird name for your database, others let you create it with whatever name you choose.</div>
+  <div class="install text">
+    <input type="submit" id="install_submit" value="Did I type everything correctly?" /></div>
+  </form>
+  </div>
+
+
+<div id="settingsform" style="display:none">
+  <p>Well, that was easy. This will be easier. You can change all of these settings later.</p>
+  <form id="settings" action="/install/settings" method="POST">
+              {{settingsform.csrf}}
+  <div class="input text">
+                  {{ settingsform.username.label }} {{ settingsform.username }}</div>
+  <div class="input text">
+                  {{ settingsform.password.label }} {{ settingsform.password }}</div>
+  <div class="input text">
+                  {{ settingsform.port.label }} {{ settingsform.port }}</div>
+  <div class="input text">
+                  {{ settingsform.date_format.label }} {{ settingsform.date_format }}</div>
+  <div class="input select">
+                  {{ settingsform.timezone.label }} {{ settingsform.timezone }}</div>
+  <div class="input select">
+                  {{ settingsform.temp_units.label }} {{ settingsform.temp_units }}</div>
+  <div class="input select">
+                  {{ settingsform.length_units.label }} {{ settingsform.length_units }}</div>
+  <div class="input select">
+                  {{ settingsform.volume_units.label }} {{ settingsform.volume_units }}</div>
+If you fill these in with your latitude/longitude, {{program_name}} will be able to tell you how much sunlight to expect for that day.
+  <div class="input select">
+                  {{ settingsform.latitude.label }} {{ settingsform.latitude(value=0) }}</div>
+  <div class="input select">
+                  {{ settingsform.longitude.label }} {{ settingsform.longitude(value=0) }}</div>
+  <div class="input select">
+                  {{ settingsform.allow_plantlog_edit.label }} {{ settingsform.allow_plantlog_edit }}</div>
+  <div class="input select">
+                  {{ settingsform.allow_envlog_edit.label }} {{ settingsform.allow_envlog_edit }}</div>
+  <div class="input submit">
+                  <input type="submit" value="Submit"></div>
+  </form>
+</div>
+<div id="finalform" style="display:none">
+
+   <p>Just one more thing, and it's <strong>really important:</strong></p>
+   <p>There is no password reset function. If you forgot your password, you're going to have to go into the database and reset it yourself.</p>
+   <p>Hey, guess what? We're done. Don't believe me? <a href='/reload'>Login here</a></p>
+</div>
+</div>
+
+{% include 'footer.html' %}

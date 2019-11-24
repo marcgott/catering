@@ -1,0 +1,20 @@
+<form action="" method="post">
+            {{form.csrf}}
+<div class="input text">
+                {{ form.name.label }} {{ form.name(value=row['name']) }}</div>
+<div class="input select">
+                {{ form.organic.label }} {{ form.organic }}</div>
+<div class="input text">
+                {{ form.nitrogen.label }} {{ form.nitrogen }}</div>
+<div class="input text">
+                {{ form.phosphorus.label }} {{ form.phosphorus }}</div>
+<div class="input text">
+                {{ form.potassium.label }} {{ form.potassium }}</div>
+<div class="input text">
+                {{ form.trace.label }} {{ form.trace }}</div>
+<div class="input submit">
+{% if row['id'] %}
+<input type=hidden name=id value="{{row['id']}}" />
+{% endif %}
+                <input type="submit" value="Submit"></div>
+</form>

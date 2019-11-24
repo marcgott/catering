@@ -1,0 +1,29 @@
+<div id="plant_details">
+<form action="" method="post" enctype="multipart/form-data">
+            {{form.csrf}}
+<div class="input text">
+                {{ form.name.label }} {{ form.name(value=row['name']) }}</div>
+<div class="input select">
+                {{ form.source.label }} {{ form.source }}</div>
+<div class="input text">
+                {{ form.grow_medium.label }} {{ form.grow_medium }}</div>
+<div class="input select">
+                {{ form.gender.label }} {{ form.gender }}</div>
+<div id="plant_strain" class="input select">
+                {{ form.strain.label }} {{ form.strain }}</div>
+<div id="plant_cycle" class="input select">
+                {{ form.cycle.label }} {{ form.cycle }}</div>
+<div class="input file">
+                {{ form.photo.label }} {{ form.photo }}</div>
+<div class="input submit">
+{% if row['id'] %}
+<input type=hidden name=id value="{{row['id']}}" />
+{% endif %}
+                <input type="submit" value="Submit"></div>
+</form>
+</div>
+{% if row is not none %}
+<div id="plant_image">
+  <img src="data:{{row.photo.mimetype}};base64,{{row.photo.data}}"\>
+</div>
+{% endif %}

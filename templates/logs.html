@@ -1,0 +1,41 @@
+{% include 'header.html' %}
+<h2 class="page_header"><i class="fas fa-{{icon}}" style="margin-right:.2em"></i>Daily Log {{ plant_name }}</h2>
+<p><a href="{{ url_for('.add_new_log_view') }}" class="operation_btn"><i class="fas fa-plus-circle" style="margin-right:.2em"></i>Add Log</a>  <a href="{{ url_for('.add_print_log_view') }}" class="operation_btn"><i class="fas fa-print" style="margin-right:.2em"></i>Print Log</a></p>
+<p>
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	  {% if messages %}
+		<ul class=flashes>
+		{% for message in messages %}
+		  <li class="{{message[0]}}"><i class="fas fa-{{icon}}"></i> {{ message[1] }}</li>
+		{% endfor %}
+		</ul>
+	  {% endif %}
+	{% endwith %}
+</p>
+
+<strong>Showing {{offset + 1}}-{{offset + returned_rows }} of {{total_logs}} Log Entries:</strong>
+<div class="log_navigation">
+{% if offset+0 > 0 %}
+<a href="/logs" class="navigation_btn"><i class="fas fa-fast-backward"></i></a>
+<a href="/logs?offset={{offset - 40}}" class="navigation_btn"><i class="fas fa-backward"></i></a>
+{% endif %}
+{% if returned_rows < total_logs - offset %}
+<a href="/logs?offset={{offset + 40}}" class="navigation_btn"><i class="fas fa-forward"></i></a>
+<a href="/logs?offset={{total_logs - 40}}" class="navigation_btn"><i class="fas fa-fast-forward"></i></a>
+{% endif %}
+</div>
+
+{{ table }}
+
+<div class="log_navigation">
+{% if offset+0 > 0 %}
+<a href="/logs" class="navigation_btn"><i class="fas fa-fast-backward"></i></a>
+<a href="/logs?offset={{offset - 40}}" class="navigation_btn"><i class="fas fa-backward"></i></a>
+{% endif %}
+{% if returned_rows < total_logs - offset %}
+<a href="/logs?offset={{offset + 40}}" class="navigation_btn"><i class="fas fa-forward"></i></a>
+<a href="/logs?offset={{total_logs - 40}}" class="navigation_btn"><i class="fas fa-fast-forward"></i></a>
+{% endif %}
+</div>
+
+{% include 'footer.html' %}

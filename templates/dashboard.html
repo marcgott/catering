@@ -1,0 +1,22 @@
+{% include 'header.html' %}
+<h2 class="page_header"><i class="fas fa-{{icon}}" style="margin-right:.2em"></i>{{ operation }}</h2>
+<p>
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	  {% if messages %}
+		<ul class=flashes>
+		{% for message in messages %}
+		  <li class="{{message[0]}}"><i class="glyphicon glyphicon-{{icon}}"></i> {{ message[1] }}</li>
+		{% endfor %}
+		</ul>
+	  {% endif %}
+	{% endwith %}
+</p>
+<h3>General Statistics</h3>
+{{ table }}
+{% if settings.latitude != '0' and settings.longitude != '0' %}
+<h3>Daytime Information for {{settings.latitude}}, {{settings.longitude}}</h3>
+Today's Daylight Hours: {{day.day_length}}
+{% endif %}
+<h3>Settings</h3>
+{{ settings_table }}
+{% include 'footer.html' %}

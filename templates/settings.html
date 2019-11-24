@@ -1,0 +1,29 @@
+<form action="/settings/update" method="POST">
+{{form.csrf}}
+
+<div class="settingsdiv">
+<h3>Admin</h3>
+  <div class="input text">{{ form.username.label }} {{ form.username }}</div>
+  <div class="input text">{{ form.password.label }} {{ form.password }}</div>
+</div>
+
+<div class="settingsdiv">
+<h3>Date/Time/Location</h3>
+<div class="input text">{{ form.date_format.label }} {{ form.date_format }}</div>
+<div class="input text">{{ form.latitude.label }} {{ form.latitude }}</div>
+<div class="input text">{{ form.longitude.label }} {{ form.longitude }}</div>
+<div class="input select">{{ form.timezone.label }} {{ form.timezone }}</div>
+</div>
+
+<div class="settingsdiv">
+  <h3>{{program_name}} Options</h3>
+  <div class="input select">{{ form.temp_units.label }} {{ form.temp_units }}</div>
+  <div class="input select">{{ form.length_units.label }} {{ form.length_units }}</div>
+  <div class="input select">{{ form.volume_units.label }} {{ form.volume_units }}</div>
+  <div class="input select">{{ form.allow_plantlog_edit.label }} {{ form.allow_plantlog_edit}}</div>
+  <div class="input select">{{ form.allow_envlog_edit.label }} {{ form.allow_envlog_edit }}</div>
+
+</div>
+
+<div class="input submit"><input type="submit" value="Save Settings"></div>
+</form>
