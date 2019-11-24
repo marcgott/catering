@@ -38,7 +38,7 @@ def show_menu():
 		return render_template('login.html',referrer=referrer,form=form,program_name=app.program_name,operation="Log In",is_login=session.get('logged_in'))
 	operation="Dashboard"
 	try:
-		countsql = "SELECT (SELECT count(plant.id) FROM `plant` WHERE plant.current_stage NOT IN ('Archive','Dead')) as 'pc' ,(SELECT count(environment.id) FROM `environment`) as 'ec', (SELECT count(strain.id) FROM `strain`) as 'sc', (SELECT count(cycle.id) FROM `cycle`) as 'ac', (SELECT count(repellent.id) FROM `repellent`) as 'rc', (SELECT count(nutrient.id) FROM `nutrient`) as 'nc', (SELECT max(log.ts) FROM `log`) as 'lastlog'"
+		countsql = "SELECT (SELECT count(plant.id) FROM `plant` WHERE plant.current_stage NOT IN ('Archive','Dead')) as 'pc' ,(SELECT count(environment.id) FROM `environment`) as 'ec', (SELECT count(strain.id) FROM `strain`) as 'sc', (SELECT count(cycle.id) FROM `cycle`) as 'ac', (SELECT count(repellent.id) FROM `repellent`) as 'rc', (SELECT count(nutrient.id) FROM `nutrient`) as 'nc', (SELECT max(order.ts) FROM `order`) as 'lastlog'"
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
 		cursor.execute(countsql)

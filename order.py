@@ -22,14 +22,14 @@ def show_order():
 			offset = 0 + int(request.args.get('offset'))
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		sql = "SELECT order.*, plant.name as plant_name, nutrient.name as nutrient_name, environment.name as environment_name, repellent.name as repellent_name FROM order LEFT JOIN plant ON plant.id = order.plant_ID LEFT JOIN nutrient ON nutrient.id = order.nutrient_ID LEFT JOIN environment ON environment.id = order.environment_ID LEFT JOIN repellent ON repellent.id = order.repellent_ID ORDER BY orderdate DESC, ts DESC LIMIT %d,40" % int(offset)
+		sql = "SELECT `order`.*, plant.name as plant_name, nutrient.name as nutrient_name, environment.name as environment_name, repellent.name as repellent_name FROM `order` LEFT JOIN plant ON plant.id = `order`.plant_ID LEFT JOIN nutrient ON nutrient.id = `order`.nutrient_ID LEFT JOIN environment ON environment.id = `order`.environment_ID LEFT JOIN repellent ON repellent.id = `order`.repellent_ID ORDER BY `order`.orderdate DESC, ts DESC LIMIT %d,40" % int(offset)
 		cursor.execute(sql)
 		rows = cursor.fetchall()
 		#get_settings()
-		table = Plantorder(rows)
+		table = PlantLog(rows)
 		table.border = True
 		table.plant_name.show=True
-		if isinstance( app.settings["allow_plantorder_edit"],(bool) ):
+		if isinstance( app.settings["allow_plantlog_edit"],(bool) ):
 			table.edit.show=True
 			table.delete.show=True
 		else:
@@ -37,11 +37,11 @@ def show_order():
 			table.delete.show=False
 
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		sql = "SELECT COUNT(*) AS ordercount FROM order "
+		sql = "SELECT COUNT(*) AS ordercount FROM `order`"
 		cursor.execute(sql)
 		rowcount = cursor.fetchone()
 		returned_rows = len(rows)
-		return render_template('order.html', offset=int(offset), table=table, icon=icon, total_order=rowcount['ordercount'],returned_rows=returned_rows,operation=operation,program_name=app.program_name,is_login=session.get('orderged_in'))
+		return render_template('orders.html', offset=int(offset), table=table, icon=icon, total_orders=rowcount['ordercount'],returned_rows=returned_rows,operation=operation,program_name=app.program_name,is_login=session.get('orderged_in'))
 	except Exception as e:
 		print(e)
 	finally:

@@ -12,7 +12,7 @@ from strains import *
 from environments import *
 from nutrients import *
 from repellents import *
-from log import *
+from order import *
 
 program_name="PepperTrax"
 

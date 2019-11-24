@@ -16,7 +16,7 @@ class PlantLog(Table):
     classes = ['main','chart','log']
     id = Col('id', show=False)
     plant_name = LinkCol('Plant Name', 'view_plant', url_kwargs=dict(id='plant_ID'),attr='plant_name')
-    logdate = DateCol('Log Date', date_format='short')
+    orderdate = DateCol('Order Date', date_format='short')
     stage = AddIconCol('Stage')
     water = BoolCol('Water',  yes_display='Yes', no_display='No')
     height = Col('Height')
@@ -30,8 +30,8 @@ class PlantLog(Table):
     trim = Col('Trim')
     transplant = BoolCol('Transplant',  yes_display='Yes', no_display='No')
     notes = Col('Notes')
-    edit = LinkCol('Edit', 'edit_log', url_kwargs=dict(id='id'), show=False)
-    delete = LinkCol('Delete', 'delete_log', url_kwargs=dict(id='id'), show=False)
+    edit = LinkCol('Edit', 'edit_order', url_kwargs=dict(id='id'), show=False)
+    delete = LinkCol('Delete', 'delete_order', url_kwargs=dict(id='id'), show=False)
 
 class PrintLog(Table):
     table_id = 'print_log'
