@@ -17,12 +17,13 @@ try:
 	from nutrients import *
 	from repellents import *
 	from reports import *
-	from log import *
+	from order import *
 	from api import *
 
 	#app.secret_key = generate_password_hash('gardentrax')
 
 except ImportError as e:
+	print(e)
 	from install import *
 
 app.settings = get_settings()

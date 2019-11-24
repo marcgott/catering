@@ -10,10 +10,10 @@ from tables import *
 from forms import *
 
 icon="clipboard-check"
-operation="Log"
+operation="order"
 
-@app.route('/logs')
-def show_logs():
+@app.route('/order')
+def show_order():
 	if check_login() is not True:
 		return redirect("/")
 	try:
@@ -22,14 +22,14 @@ def show_logs():
 			offset = 0 + int(request.args.get('offset'))
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		sql = "SELECT log.*, plant.name as plant_name, nutrient.name as nutrient_name, environment.name as environment_name, repellent.name as repellent_name FROM log LEFT JOIN plant ON plant.id = log.plant_ID LEFT JOIN nutrient ON nutrient.id = log.nutrient_ID LEFT JOIN environment ON environment.id = log.environment_ID LEFT JOIN repellent ON repellent.id = log.repellent_ID ORDER BY logdate DESC, ts DESC LIMIT %d,40" % int(offset)
+		sql = "SELECT order.*, plant.name as plant_name, nutrient.name as nutrient_name, environment.name as environment_name, repellent.name as repellent_name FROM order LEFT JOIN plant ON plant.id = order.plant_ID LEFT JOIN nutrient ON nutrient.id = order.nutrient_ID LEFT JOIN environment ON environment.id = order.environment_ID LEFT JOIN repellent ON repellent.id = order.repellent_ID ORDER BY orderdate DESC, ts DESC LIMIT %d,40" % int(offset)
 		cursor.execute(sql)
 		rows = cursor.fetchall()
 		#get_settings()
-		table = PlantLog(rows)
+		table = Plantorder(rows)
 		table.border = True
 		table.plant_name.show=True
-		if isinstance( app.settings["allow_plantlog_edit"],(bool) ):
+		if isinstance( app.settings["allow_plantorder_edit"],(bool) ):
 			table.edit.show=True
 			table.delete.show=True
 		else:
@@ -37,19 +37,19 @@ def show_logs():
 			table.delete.show=False
 
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		sql = "SELECT COUNT(*) AS logcount FROM log "
+		sql = "SELECT COUNT(*) AS ordercount FROM order "
 		cursor.execute(sql)
 		rowcount = cursor.fetchone()
 		returned_rows = len(rows)
-		return render_template('logs.html', offset=int(offset), table=table, icon=icon, total_logs=rowcount['logcount'],returned_rows=returned_rows,operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
+		return render_template('order.html', offset=int(offset), table=table, icon=icon, total_order=rowcount['ordercount'],returned_rows=returned_rows,operation=operation,program_name=app.program_name,is_login=session.get('orderged_in'))
 	except Exception as e:
 		print(e)
 	finally:
 		cursor.close()
 		conn.close()
 
-@app.route('/log/print', methods=['GET'])
-def add_print_log_view():
+@app.route('/order/print', methods=['GET'])
+def add_print_order_view():
 	if check_login() is not True:
 		return redirect("/")
 	try:
@@ -74,18 +74,18 @@ def add_print_log_view():
 			printrow['trim']= ''
 			printrow['notes']= ''
 			tablerows.append(printrow)
-		table = PrintLog(tablerows)
+		table = Printorder(tablerows)
 		table.border = True
 	except Exception as e:
 		print(e)
 	title_verb = "Print"
 	icon="clipboard-check"
-	return render_template('print_log.html', title_verb=title_verb, table=table, icon=icon, rows=rows,operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
+	return render_template('print_order.html', title_verb=title_verb, table=table, icon=icon, rows=rows,operation=operation,program_name=app.program_name,is_login=session.get('orderged_in'))
 
 #
-# Display and process new log
-@app.route('/log/new', methods=['GET','POST'])
-def add_new_log_view():
+# Display and process new order
+@app.route('/order/new', methods=['GET','POST'])
+def add_new_order_view():
 	if check_login() is not True:
 		return redirect("/")
 	icon=None
@@ -102,12 +102,12 @@ def add_new_log_view():
 			_repellent_ID = request.form['repellent_ID']
 			_stage = request.form['stage']
 			_soil_pH = request.form['soil_pH']
-			_logdate = request.form['logdate']
+			_orderdate = request.form['orderdate']
 			_trim = request.form['trim']
 			_notes = request.form['notes']
 
-			sql = "INSERT INTO log(plant_ID, water, height, span, nodes, environment_ID, nutrient_ID, repellent_ID, stage, trim, transplant, notes, logdate,  soil_pH ) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-			data = (_plant_ID, _water, _height, _span, _nodes, _environment_ID, _nutrient_ID, _repellent_ID, _stage, _trim, _transplant, _notes, _logdate, _soil_pH)
+			sql = "INSERT INTO order(plant_ID, water, height, span, nodes, environment_ID, nutrient_ID, repellent_ID, stage, trim, transplant, notes, orderdate,  soil_pH ) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+			data = (_plant_ID, _water, _height, _span, _nodes, _environment_ID, _nutrient_ID, _repellent_ID, _stage, _trim, _transplant, _notes, _orderdate, _soil_pH)
 			conn = mysql.connect()
 			cursor = conn.cursor()
 			cursor.execute(sql, data)
@@ -121,10 +121,10 @@ def add_new_log_view():
 			conn.commit()
 
 			icon="clipboard-check"
-			flash('New Log Added!','info')
+			flash('New order Added!','info')
 		except Exception as e:
 			icon="remove"
-			flash('New Log Not Added','error')
+			flash('New order Not Added','error')
 			print(e)
 
 	try:
@@ -133,8 +133,8 @@ def add_new_log_view():
 		cursor.execute("SELECT plant.id as plant_ID,plant.name AS name, environment.light_hours as light_hours FROM plant LEFT JOIN environment ON plant.current_environment = environment.id WHERE plant.current_stage <> 'Archive' AND plant.current_stage <> 'Dead' ORDER BY CAST(plant.name AS unsigned)")
 		rows = cursor.fetchall()
 
-		form = LogForm(request.form)
-		envform = EnvironmentLogForm(request.form)
+		form = orderForm(request.form)
+		envform = EnvironmentorderForm(request.form)
 		envform.light.default = session['daylight'] if session['daylight'] != 'unknown' else 0
 		envform.light.default = rows[0]['light_hours'] if rows[0]['light_hours'] != 'unknown' else 0
 		envform.dark.default = session['darkness'] if session['darkness'] != 'unknown' else 0
@@ -144,10 +144,10 @@ def add_new_log_view():
 	title_verb = "Add"
 	icon="clipboard-check"
 	icons = get_icons()
-	return render_template('operation_form.html', formpage='add_plantlog.html', action=request.path, title_verb=title_verb, form=form,envform=envform, icon=icon, icons=icons, rows=rows,operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
+	return render_template('operation_form.html', formpage='add_plantorder.html', action=request.path, title_verb=title_verb, form=form,envform=envform, icon=icon, icons=icons, rows=rows,operation=operation,program_name=app.program_name,is_login=session.get('orderged_in'))
 
-@app.route('/log/edit/<int:id>', methods=['POST','GET'])
-def edit_log(id):
+@app.route('/order/edit/<int:id>', methods=['POST','GET'])
+def edit_order(id):
 	icon=None
 	if request.method == "POST":
 		_water = 1 if 'water' in request.form else 0
@@ -161,13 +161,13 @@ def edit_log(id):
 		_repellent_ID = request.form['repellent_ID']
 		_stage = request.form['stage']
 		_soil_pH = request.form['soil_pH']
-		_logdate = request.form['logdate']
+		_orderdate = request.form['orderdate']
 		_trim = request.form['trim']
 		_notes = request.form['notes']
 		_id = request.form['id']
 
-		sql = "UPDATE log SET plant_ID=%s, water=%s, height=%s, span=%s, nodes=%s, environment_ID=%s, nutrient_ID=%s, repellent_ID=%s, stage=%s, trim=%s, transplant=%s, notes=%s, logdate=%s, soil_pH=%s WHERE id=%s"
-		data = (_plant_ID, _water, _height, _span, _nodes, _environment_ID, _nutrient_ID, _repellent_ID, _stage, _trim, _transplant, _notes, _logdate, _soil_pH, _id)
+		sql = "UPDATE order SET plant_ID=%s, water=%s, height=%s, span=%s, nodes=%s, environment_ID=%s, nutrient_ID=%s, repellent_ID=%s, stage=%s, trim=%s, transplant=%s, notes=%s, orderdate=%s, soil_pH=%s WHERE id=%s"
+		data = (_plant_ID, _water, _height, _span, _nodes, _environment_ID, _nutrient_ID, _repellent_ID, _stage, _trim, _transplant, _notes, _orderdate, _soil_pH, _id)
 		conn = mysql.connect()
 		cursor = conn.cursor()
 		cursor.execute(sql, data)
@@ -181,18 +181,18 @@ def edit_log(id):
 		conn.commit()
 
 		icon="clipboard-check"
-		flash('Log updated successfully!','info')
+		flash('order updated successfully!','info')
 
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT log.*, plant.name as name FROM log LEFT JOIN plant ON plant.id=log.plant_ID WHERE log.id=%s LIMIT 1", id)
+		cursor.execute("SELECT order.*, plant.name as name FROM order LEFT JOIN plant ON plant.id=order.plant_ID WHERE order.id=%s LIMIT 1", id)
 		row = cursor.fetchone()
 
 		if row:
-			form = LogForm(request.form)
+			form = orderForm(request.form)
 			form.id.default = row['id']
-			form.logdate.default = row['logdate'] if row['logdate']!='' else ''
+			form.orderdate.default = row['orderdate'] if row['orderdate']!='' else ''
 			form.water.default = True if row['water'] > 0 else 0
 			form.transplant.default = True if row['transplant'] > 0 else 0
 			form.span.default = row['span'] if row['span'] > 0 else ''
@@ -210,24 +210,24 @@ def edit_log(id):
 		title_verb = "Edit"
 		icon="clipboard-check"
 		icons = get_icons()
-		return render_template('operation_form.html', formpage='add_plantlog.html', action=request.path, title_verb=title_verb, icon=icon, icons=icons, form=form, rows=[row], rowid=row['id'],operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
+		return render_template('operation_form.html', formpage='add_plantorder.html', action=request.path, title_verb=title_verb, icon=icon, icons=icons, form=form, rows=[row], rowid=row['id'],operation=operation,program_name=app.program_name,is_login=session.get('orderged_in'))
 	except Exception as e:
 		print(e)
 	finally:
 		cursor.close()
 		conn.close()
 
-@app.route('/log/delete/<int:id>')
-def delete_log(id):
+@app.route('/order/delete/<int:id>')
+def delete_order(id):
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor()
-		cursor.execute("DELETE FROM log WHERE id=%s", (id,))
+		cursor.execute("DELETE FROM order WHERE id=%s", (id,))
 		conn.commit()
-		flash('Log deleted successfully!','info')
+		flash('order deleted successfully!','info')
 	except Exception as e:
 		print(e)
 	finally:
 		cursor.close()
 		conn.close()
-	return redirect("/logs")
+	return redirect("/order")
