@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS `cycle`;
-CREATE TABLE IF NOT EXISTS `cycle` (
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE IF NOT EXISTS `menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `start` date NOT NULL,
@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS `cycle` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 
-DROP TABLE IF EXISTS `environment`;
-CREATE TABLE IF NOT EXISTS `environment` (
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE IF NOT EXISTS `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `location` enum('indoor','outdoor') NOT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `environment` (
   `wattage` varchar(255) NOT NULL,
   `grow_area` varchar(64) NOT NULL,
   `containment` varchar(255) NOT NULL,
-  `max_plants` int(2) NOT NULL,
+  `max_customers` int(2) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS `environment` (
 DROP TABLE IF EXISTS `log`;
 CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `plant_ID` int(11) NOT NULL,
+  `customer_ID` int(11) NOT NULL,
   `nutrient_ID` int(11) DEFAULT NULL,
-  `environment_ID` int(11) DEFAULT NULL,
+  `product_ID` int(11) DEFAULT NULL,
   `repellent_ID` int(11) DEFAULT NULL,
   `stage` varchar(64) DEFAULT NULL,
   `water` tinyint(1) DEFAULT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `nodes` int(2) NOT NULL,
   `lux` int(5) NOT NULL,
   `soil_pH` decimal(2,1) NOT NULL DEFAULT '7.0',
-  `transplant` tinyint(1) DEFAULT NULL,
+  `transcustomer` tinyint(1) DEFAULT NULL,
   `photo` blob,
   `notes` text CHARACTER SET utf8,
   `logdate` date DEFAULT NULL,
@@ -75,18 +75,18 @@ CREATE TABLE IF NOT EXISTS `options` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 
-DROP TABLE IF EXISTS `plant`;
-CREATE TABLE IF NOT EXISTS `plant` (
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE IF NOT EXISTS `customer` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8 NOT NULL,
   `gender` varchar(32) NOT NULL,
   `strain_ID` varchar(255) NOT NULL,
-  `cycle_ID` varchar(255) NOT NULL,
+  `menu_ID` varchar(255) NOT NULL,
   `source` varchar(64) NOT NULL,
   `grow_medium` VARCHAR( 64 ) NOT NULL,
   `yield` int(3) NOT NULL,
   `current_stage` varchar(255) DEFAULT NULL,
-  `current_environment` int(4) NOT NULL,
+  `current_product` int(4) NOT NULL,
   `current_nodes` int(2) NOT NULL,
   `photo` longtext NOT NULL, 
   PRIMARY KEY (`id`)

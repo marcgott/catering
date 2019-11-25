@@ -10,10 +10,10 @@ try:
 	import json
 	from forms import *
 	from tables import *
-	from plants import *
-	from cycles import *
+	from customer import *
+	from menu import *
 	from strains import *
-	from environments import *
+	from product import *
 	from nutrients import *
 	from repellents import *
 	from reports import *
@@ -38,7 +38,7 @@ def show_menu():
 		return render_template('login.html',referrer=referrer,form=form,program_name=app.program_name,operation="Log In",is_login=session.get('logged_in'))
 	operation="Dashboard"
 	try:
-		countsql = "SELECT (SELECT count(plant.id) FROM `plant` WHERE plant.current_stage NOT IN ('Archive','Dead')) as 'pc' ,(SELECT count(environment.id) FROM `environment`) as 'ec', (SELECT count(strain.id) FROM `strain`) as 'sc', (SELECT count(cycle.id) FROM `cycle`) as 'ac', (SELECT count(repellent.id) FROM `repellent`) as 'rc', (SELECT count(nutrient.id) FROM `nutrient`) as 'nc', (SELECT max(order.ts) FROM `order`) as 'lastlog'"
+		countsql = "SELECT (SELECT count(customer.id) FROM `customer` WHERE customer.current_stage NOT IN ('Archive','Dead')) as 'pc' ,(SELECT count(product.id) FROM `product`) as 'ec', (SELECT count(strain.id) FROM `strain`) as 'sc', (SELECT count(menu.id) FROM `menu`) as 'ac', (SELECT count(repellent.id) FROM `repellent`) as 'rc', (SELECT count(nutrient.id) FROM `nutrient`) as 'nc', (SELECT max(order.ts) FROM `order`) as 'lastlog'"
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
 		cursor.execute(countsql)
@@ -131,12 +131,12 @@ def update_user():
 		_volume_units = request.form['volume_units']
 		_latitude = request.form['latitude']
 		_longitude = request.form['longitude']
-		_allow_plantlog_edit = "True" if 'allow_plantlog_edit' in request.form else ""
+		_allow_orders_edit = "True" if 'allow_orders_edit' in request.form else ""
 		_allow_envlog_edit = "True" if 'allow_envlog_edit' in request.form else ""
 		# validate the received values
 
-		sql = "UPDATE options SET `option_value`=%s WHERE `option_key`='timezone'; UPDATE options SET `option_value`=%s WHERE `option_key`='temp_units'; UPDATE options SET `option_value`=%s WHERE `option_key`='length_units'; UPDATE options SET `option_value`=%s WHERE `option_key`='volume_units'; UPDATE options SET `option_value`=%s WHERE `option_key`='date_format';UPDATE options SET `option_value`=%s WHERE `option_key`='username';UPDATE options SET `option_value`=%s WHERE `option_key`='password';UPDATE options SET `option_value`=%s WHERE `option_key`='allow_plantlog_edit';UPDATE options SET `option_value`=%s WHERE `option_key`='allow_envlog_edit';UPDATE options SET `option_value`=%s WHERE `option_key`='latitude';UPDATE options SET `option_value`=%s WHERE `option_key`='longitude'; "
-		data = (_timezone, _temp_units, _length_units, _volume_units, _date_format, _username, _password,_allow_plantlog_edit,_allow_envlog_edit,_latitude,_longitude)
+		sql = "UPDATE options SET `option_value`=%s WHERE `option_key`='timezone'; UPDATE options SET `option_value`=%s WHERE `option_key`='temp_units'; UPDATE options SET `option_value`=%s WHERE `option_key`='length_units'; UPDATE options SET `option_value`=%s WHERE `option_key`='volume_units'; UPDATE options SET `option_value`=%s WHERE `option_key`='date_format';UPDATE options SET `option_value`=%s WHERE `option_key`='username';UPDATE options SET `option_value`=%s WHERE `option_key`='password';UPDATE options SET `option_value`=%s WHERE `option_key`='allow_orders_edit';UPDATE options SET `option_value`=%s WHERE `option_key`='allow_envlog_edit';UPDATE options SET `option_value`=%s WHERE `option_key`='latitude';UPDATE options SET `option_value`=%s WHERE `option_key`='longitude'; "
+		data = (_timezone, _temp_units, _length_units, _volume_units, _date_format, _username, _password,_allow_orders_edit,_allow_envlog_edit,_latitude,_longitude)
 		conn = mysql.connect()
 		cursor = conn.cursor()
 		cursor.execute(sql, data)

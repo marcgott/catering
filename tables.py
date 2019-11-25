@@ -11,11 +11,11 @@ class AddIconCol(Col):
             return '<i class="fas fa-%s"></i>  %s' % (icon[content.lower()],content)
         return ''
 
-class PlantLog(Table):
-    table_id = 'daily_log'
-    classes = ['main','chart','log']
+class Orders(Table):
+    table_id = 'orders'
+    classes = ['main','chart','order']
     id = Col('id', show=False)
-    plant_name = LinkCol('Plant Name', 'view_plant', url_kwargs=dict(id='plant_ID'),attr='plant_name')
+    customer_name = LinkCol('Customer Name', 'view_customer', url_kwargs=dict(id='customer_ID'),attr='customer_name')
     orderdate = DateCol('Order Date', date_format='short')
     stage = AddIconCol('Stage')
     water = BoolCol('Water',  yes_display='Yes', no_display='No')
@@ -24,46 +24,46 @@ class PlantLog(Table):
     nodes = Col('Nodes')
     nutrient_name = Col('Nutrient')
     repellent_name = Col('Repellent')
-    environment_name = Col('Environment')
+    product_name = Col('Product')
     lux = Col('Lux',td_html_attrs={'class':'luxlevel'}, show=False)
     soil_pH = Col('Soil pH')
     trim = Col('Trim')
-    transplant = BoolCol('Transplant',  yes_display='Yes', no_display='No')
+    transcustomer = BoolCol('Transcustomer',  yes_display='Yes', no_display='No')
     notes = Col('Notes')
     edit = LinkCol('Edit', 'edit_order', url_kwargs=dict(id='id'), show=False)
     delete = LinkCol('Delete', 'delete_order', url_kwargs=dict(id='id'), show=False)
 
 class PrintLog(Table):
     table_id = 'print_log'
-    name = Col('Plant Name',td_html_attrs={'class':'printname'})
+    name = Col('Customer Name',td_html_attrs={'class':'printname'})
     picture = Col('Photo', show=False)
     water = Col('H2O',td_html_attrs={'class':'printblank'})
     nutrient = Col('Nutr.')
     height = Col('Height',td_html_attrs={'class':'printblank'})
     span = Col('Span',td_html_attrs={'class':'printblank'})
     nodes = Col('Nodes',td_html_attrs={'class':'printblank'})
-    transplant = Col('Repot')
+    transcustomer = Col('Repot')
     lux = Col('Lux', show=False)
     soil_pH = Col('pH')
     trim = Col('Trim')
     notes = Col('Notes',column_html_attrs={'class':'printnotes'})
 
-class Plant(Table):
-    classes = ['main','chart','plant']
+class Customer(Table):
+    classes = ['main','chart','customer']
     id = Col('id', show=False)
     name = Col('Name')
     gender = AddIconCol('Gender')
     strain_name = Col('Strain')
-    cycle_name = Col('Cycle')
+    menu_name = Col('Menu')
     photo = Col('Photo' ,show=False)
     current_stage = AddIconCol('Current Stage')
-    current_environment = Col('Current Environment')
+    current_product = Col('Current Product')
     source = Col('Source', show=False)
     grow_medium = Col('Grow Medium', show=False)
-    log = LinkCol('Log', 'show_plant_log', url_kwargs=dict(id='id'))
-    details = LinkCol('Details', 'view_plant', url_kwargs=dict(id='id'))
-    edit = LinkCol('Edit', 'edit_plant', url_kwargs=dict(id='id'))
-    delete = LinkCol('Delete', 'delete_plant', url_kwargs=dict(id='id'))
+    log = LinkCol('Log', 'show_customer_log', url_kwargs=dict(id='id'))
+    details = LinkCol('Details', 'view_customer', url_kwargs=dict(id='id'))
+    edit = LinkCol('Edit', 'edit_customer', url_kwargs=dict(id='id'))
+    delete = LinkCol('Delete', 'delete_customer', url_kwargs=dict(id='id'))
 
     def get_tr_attrs(self, item):
         if item['current_stage'] == 'Dead':
@@ -71,16 +71,16 @@ class Plant(Table):
         else:
             return {}
 
-class Cycle(Table):
-    classes = ['main','chart','cycle']
+class Menu(Table):
+    classes = ['main','chart','menu']
     id = Col('id', show=False)
     name = Col('Name')
     start = Col('Start')
     end = Col('End')
     location = Col('Location')
     light_hours = Col('Light Hours')
-    edit = LinkCol('Edit', 'edit_cycle', url_kwargs=dict(id='id'))
-    delete = LinkCol('Delete', 'delete_cycle', url_kwargs=dict(id='id'))
+    edit = LinkCol('Edit', 'edit_menu', url_kwargs=dict(id='id'))
+    delete = LinkCol('Delete', 'delete_menu', url_kwargs=dict(id='id'))
 
 class Strain(Table):
     classes = ['main','chart','strain']
@@ -91,8 +91,8 @@ class Strain(Table):
     edit = LinkCol('Edit', 'edit_strain', url_kwargs=dict(id='id'))
     delete = LinkCol('Delete', 'delete_strain', url_kwargs=dict(id='id'))
 
-class Environment(Table):
-    classes = ['main','chart','environment']
+class Product(Table):
+    classes = ['main','chart','product']
     id = Col('id', show=False)
     name = Col('Name')
     location = Col('Location')
@@ -104,9 +104,9 @@ class Environment(Table):
     wattage = Col('Wattage')
     grow_area = Col('Grow area')
     containment = Col('Containment')
-    max_plants = Col('Maximum Number of Plants')
-    edit = LinkCol('Edit', 'edit_environment', url_kwargs=dict(id='id'))
-    delete = LinkCol('Delete', 'delete_environment', url_kwargs=dict(id='id'))
+    max_customers = Col('Maximum Number of Customers')
+    edit = LinkCol('Edit', 'edit_product', url_kwargs=dict(id='id'))
+    delete = LinkCol('Delete', 'delete_product', url_kwargs=dict(id='id'))
 
 class Nutrient(Table):
     classes = ['main','chart','nutrient']
@@ -136,10 +136,10 @@ class Statistics(Table):
     settings = get_settings()
     table_id = ['statistics']
     classes = ['statistics']
-    pc = Col('Plant Count')
-    ec = Col('Environment Count')
+    pc = Col('Customer Count')
+    ec = Col('Product Count')
     sc = Col('Strain Count')
-    ac = Col('Cycle Count')
+    ac = Col('Menu Count')
     rc = Col('Repellent Count')
     nc = Col('Nutrient Count')
     lastlog = DatetimeCol('Last Log')
@@ -156,5 +156,5 @@ class Settings(Table):
     volume_units = Col('Volume Units')
     length_units = Col('Length_Units')
     date_format = Col('Date Format')
-    allow_plantlog_edit = Col('Allow Plant Log Edit/Delete')
-    allow_envlog_edit = Col('Allow Environment Log Edit/Delete')
+    allow_orders_edit = Col('Allow Customer Log Edit/Delete')
+    allow_envlog_edit = Col('Allow Product Log Edit/Delete')

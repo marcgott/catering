@@ -54,21 +54,21 @@ class SettingsForm(Form):
     length_units = SelectField('Length',choices=[('cm','Centimeters'),('in','Inches')])
     volume_units = SelectField('Volume',choices=[('ml','Mililiters'),('oz','Ounces')])
     date_format = SelectField('Date Format', choices=[('yyyy-mm-dd','yyyy-mm-dd'),('mm/dd/yyyy','mm/dd/yyyy')])
-    allow_plantlog_edit = BooleanField("Allow Plant Log Edits?")
-    allow_envlog_edit = BooleanField("Allow Environment Log Edits?")
+    allow_orders_edit = BooleanField("Allow Customer Log Edits?")
+    allow_envlog_edit = BooleanField("Allow Product Log Edits?")
 
-class PlantForm(Form):
+class CustomerForm(Form):
     strains = get_db_list(table='strain',idval = True,idtxt = "Unknown",format=False)
-    cycles = get_db_list(table='cycle',idval = True,idtxt = "Unknown",format=False)
+    menus = get_db_list(table='menu',idval = True,idtxt = "Unknown",format=False)
     name = TextField('Name', validators=[validators.required()])
     gender = SelectField('Gender',choices=[('Unknown','Unknown'),('Male','Male'),('Female','Female'),('Hermaphrodite','Hermaphrodite')])
     strain = SelectField('Strain',choices=strains)
-    cycle = SelectField('Cycle',choices=cycles)
+    menu = SelectField('Menu',choices=menus)
     grow_medium = TextField('Grow Medium')
     source = SelectField('Source',choices=[('seed','Seed'),('clone','Clone'),('other','Other')])
     photo = FileField('Photo')
 
-class CycleForm(Form):
+class MenuForm(Form):
     name = TextField('Name', validators=[validators.required()])
     start = DateField('Start', validators=[validators.required()])
     end = DateField('End')
@@ -80,7 +80,7 @@ class StrainForm(Form):
     type = SelectField('Type',choices=get_strain_types())
     notes = TextAreaField('Notes')
 
-class EnvironmentForm(Form):
+class ProductForm(Form):
     name = TextField('Name', validators=[validators.required()])
     location = SelectField('Location',choices=[('indoor','Indoor'),('outdoor','Outdoor')])
     light_hours = TextField('Light Hours')
@@ -91,7 +91,7 @@ class EnvironmentForm(Form):
     wattage = TextField('Wattage')
     grow_area = TextField('Grow area')
     containment = TextField('Containment')
-    max_plants = TextField('Maximum Number of Plants')
+    max_customers = TextField('Maximum Number of Customers')
 
 class NutrientForm(Form):
     name = TextField('Name', validators=[validators.required()])
@@ -109,13 +109,13 @@ class RepellentForm(Form):
     purchase_location = TextField('Purchase Location')
     notes = TextAreaField('Notes')
 
-class LogForm(Form):
-    environment = get_db_list(table = 'environment',idval = True,idtxt = "None",format=False)
+class OrderForm(Form):
+    product = get_db_list(table = 'product',idval = True,idtxt = "None",format=False)
     nutrient = get_db_list(table = 'nutrient',idval = True,idtxt = "None",format=False)
     repellent = get_db_list(table = 'repellent',idval = True,idtxt = "None",format=False)
     id = HiddenField()
     logdate = DateField('Date')
-    plant_ID = HiddenField()
+    customer_ID = HiddenField()
     water = BooleanField('Water')
     height = IntegerField('Height')
     span = IntegerField('Span')
@@ -124,15 +124,15 @@ class LogForm(Form):
     #lux = IntegerField('Lux')
     #temperature = IntegerField('Temperature')
     soil_pH = IntegerField('pH')
-    transplant = BooleanField('Transplant')
+    transcustomer = BooleanField('Transcustomer')
     stage = SelectField('Stage',choices=[('None','None'),('Germination','Germination'),('Seedling','Seedling'),('Vegetation','Vegetation'),('Pre-Flowering','Pre-Flowering'),('Flowering','Flowering'),('Harvest','Harvest'),('Archive','Archive'),('Dead','Dead')])
-    environment_ID = SelectField('Environment',choices=environment, coerce=int)
+    product_ID = SelectField('Product',choices=product, coerce=int)
     nutrient_ID = SelectField('Nutrient',choices=nutrient, coerce=int)
     repellent_ID = SelectField('Repellent',choices=repellent, coerce=int)
     notes = TextAreaField('Notes')
 
-class EnvironmentLogForm(Form):
-    environment_ID = HiddenField()
+class ProductLogForm(Form):
+    product_ID = HiddenField()
     logdate = DateField('Date')
     temperature = IntegerField('Temperature')
     humidity = IntegerField('Humidity')

@@ -1,6 +1,6 @@
 {% include 'header.html' %}
-<h2 class="page_header"><i class="fas fa-{{icon}}" style="margin-right:.2em"></i>Orders {{ plant_name }}</h2>
-<p><a href="{{ url_for('.add_new_order_view') }}" class="operation_btn"><i class="fas fa-plus-circle" style="margin-right:.2em"></i>Add Log</a>  <a href="{{ url_for('.add_print_order_view') }}" class="operation_btn"><i class="fas fa-print" style="margin-right:.2em"></i>Print Log</a></p>
+<h2 class="page_header"><i class="fas fa-{{icon}}" style="margin-right:.2em"></i>Orders {{ customer_name }}</h2>
+<p><a href="{{ url_for('.add_new_order_view') }}" class="operation_btn"><i class="fas fa-plus-circle" style="margin-right:.2em"></i>Add Order</a>  <a href="{{ url_for('.add_print_order_view') }}" class="operation_btn"><i class="fas fa-print" style="margin-right:.2em"></i>Print Order Form</a></p>
 <p>
 	{% with messages = get_flashed_messages(with_categories=true) %}
 	  {% if messages %}

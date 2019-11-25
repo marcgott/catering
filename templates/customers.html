@@ -1,31 +1,31 @@
 {% include 'header.html' %}
 <h2><i class="fas fa-{{icon[operation|lower]}}" style="margin-right:.2em"></i>{{ row.name }}</h2>
 <p>
-		<a href="{{ url_for('edit_plant',id=row['id'])}}" class="operation_btn">Edit {{ row.name }}</a>
-		<a href="{{ url_for('show_plant_log',id=row['id']) }}" class="operation_btn"><i class="fas fa-clipboard-check" style="margin-right:.2em"></i>View Log for  {{ row.name }}</a>
+		<a href="{{ url_for('edit_customer',id=row['id'])}}" class="operation_btn">Edit {{ row.name }}</a>
+		<a href="{{ url_for('show_customer_log',id=row['id']) }}" class="operation_btn"><i class="fas fa-clipboard-check" style="margin-right:.2em"></i>View Orders for {{ row.name }}</a>
 </p>
 
-<div id="plant_details">
+<div id="customer_details">
 	<h3>Details</h3>
-	<p><i class="fas fa-{{icon['cycles']}}" style="margin-right:.2em"></i>Cycle: {{ row['cycle_name'] }}</p>
+	<p><i class="fas fa-{{icon['menus']}}" style="margin-right:.2em"></i>Menu: {{ row['menu_name'] }}</p>
 	<p><i class="fas fa-{{icon['gender']}}" style="margin-right:.2em"></i>Gender: {{ row['gender'] }}</p>
 	<p><i class="fas fa-{{icon['source']}}" style="margin-right:.2em"></i>Source: {{ row['source'] }}</p>
 	<p><i class="fas fa-{{icon['grow_medium']}}" style="margin-right:.2em"></i>Grow Medium: {{ row['grow_medium'] }}</p>
 	<p><i class="fas fa-{{icon['strains']}}" style="margin-right:.2em"></i>Strain: {{ row['strain_name'] }}</p>
-	<p><i class="fas fa-{{icon['environments']}}" style="margin-right:.2em"></i>Current Environment: {{ row['current_environment'] }}</p>
+	<p><i class="fas fa-{{icon['products']}}" style="margin-right:.2em"></i>Current Product: {{ row['current_product'] }}</p>
 	<p><i class="fas fa-{{icon[row['current_stage']|lower]}}" style="margin-right:.2em"></i>Current Stage: {{ row['current_stage'] }}</p>
 	<p><i class="fas fa-arrows-alt-v" style="margin-right:.2em"></i>Current Height: {{ row['current_height'] }}{{ option['length_units']}} (#{{height_rank}})</p>
 	<p><i class="fas fa-arrows-alt-h" style="margin-right:.2em"></i>Current Span: {{ row['current_span'] }}{{ option['length_units']}} (#{{span_rank}})</p>
 
-	<h3>Lifecycle</h3>
+	<h3>Lifemenu</h3>
 	{% for row in rows %}
 	{% if row['stage'] %}
-		<strong><i class="fas fa-{{icon[row['stage']|lower]}}" style="margin-right:.2em"></i>{{ row['stage'] }}</strong>: {{ row['logdate'] }} ({{ row['stagetotal'] }} days)<br>
+		<strong><i class="fas fa-{{icon[row['stage']|lower]}}" style="margin-right:.2em"></i>{{ row['stage'] }}</strong>: {{ row['orderdate'] }} ({{ row['stagetotal'] }} days)<br>
 	{% endif %}
 	{% endfor %}
 </div>
 
-<div id="plant_growth_chart">
+<div id="customer_growth_chart">
 {% if growth_chart != None %}
 	<img src="data:image/png;base64,{{ growth_chart }}" />
 {% endif %}

@@ -3,7 +3,7 @@
   <div id="logo"><img src="{{ url_for('static',filename='images/logo.png') }}" /></div>
 
   <div id="installform">
-    <p>Welcome to {{ program_name }}. In order to get started using {{program_name}}, we need to set up a database so we can store the information about your plants. You should have received the following information from your hosting company, or created it yourself if you're a developer. Go ahead and enter your information now. </p>
+    <p>Welcome to {{ program_name }}. In order to get started using {{program_name}}, we need to set up a database so we can store the information about your customers. You should have received the following information from your hosting company, or created it yourself if you're a developer. Go ahead and enter your information now. </p>
   <form action="/install" id="database_credentials" method="POST">
               {{dbcredform.csrf}}
   <div id="dbhost_row" class="install text">
@@ -53,7 +53,7 @@ If you fill these in with your latitude/longitude, {{program_name}} will be able
   <div class="input select">
                   {{ settingsform.longitude.label }} {{ settingsform.longitude(value=0) }}</div>
   <div class="input select">
-                  {{ settingsform.allow_plantlog_edit.label }} {{ settingsform.allow_plantlog_edit }}</div>
+                  {{ settingsform.allow_orders_edit.label }} {{ settingsform.allow_orders_edit }}</div>
   <div class="input select">
                   {{ settingsform.allow_envlog_edit.label }} {{ settingsform.allow_envlog_edit }}</div>
   <div class="input submit">

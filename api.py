@@ -6,10 +6,10 @@ from flask import jsonify, flash, request, session, abort
 from pytz import all_timezones
 from forms import *
 from tables import *
-from plants import *
-from cycles import *
+from customer import *
+from menu import *
 from strains import *
-from environments import *
+from product import *
 from nutrients import *
 from repellents import *
 from order import *
@@ -36,7 +36,7 @@ def do_api_login():
 		return resp
 
 
-@app.route('/api/plants', methods=['GET'])
+@app.route('/api/customers', methods=['GET'])
 def do_api_get_log():
 	option = get_settings();
 	print("API LOG CALLED")
@@ -44,7 +44,7 @@ def do_api_get_log():
 		try:
 			conn = mysql.connect()
 			cursor = conn.cursor(pymysql.cursors.DictCursor)
-			cursor.execute("SELECT id,name FROM plant")
+			cursor.execute("SELECT id,name FROM customer")
 			rows = cursor.fetchall()
 			#print(rows)
 			resp = jsonify(rows)
@@ -63,8 +63,8 @@ def do_api_get_log():
 		print(resp)
 		return resp
 
-@app.route('/api/plantlog/new/<int:id>', methods=['POST'])
-def do_api_post_plant_log(id):
+@app.route('/api/customerlog/new/<int:id>', methods=['POST'])
+def do_api_post_customer_log(id):
 	try:
 		option = get_settings();
 		print("API PLANT NEW ",id," CALLED")
@@ -90,15 +90,15 @@ def do_api_post_plant_log(id):
 		print(e)
 
 
-@app.route('/api/plant/view/<int:id>', methods=['GET'])
-def do_api_get_plant_view(id):
+@app.route('/api/customer/view/<int:id>', methods=['GET'])
+def do_api_get_customer_view(id):
 	option = get_settings();
 	print("API PLANT VIEW ",id," CALLED")
 	if True:
 		try:
 			conn = mysql.connect()
 			cursor = conn.cursor(pymysql.cursors.DictCursor)
-			cursor.execute("SELECT * FROM plant WHERE id=%s",(id))
+			cursor.execute("SELECT * FROM customer WHERE id=%s",(id))
 			row = cursor.fetchone()
 			resp = jsonify(row)
 			resp.status_code = 200

@@ -1,6 +1,6 @@
 # PepperTrax
 
-Welcome to PepperTrax, a Web application written in Python to help you keep track of your hot pepper plants through their growth cycles.
+Welcome to PepperTrax, a Web application written in Python to help you keep track of your hot pepper customers through their growth menus.
 
 ## Installation
 ### Clone repo
@@ -34,9 +34,9 @@ you can use `apt-get` or `pip` to install them.
 ### Logging in
 ### Dashboard
 ### Settings
-### Add Your Cycle
-### Create an Environment
-### Add Your Plants
+### Add Your Menu
+### Create an Product
+### Add Your Customers
 ### Add Strains
 ### Add Nutrients
 ### Add Repellents
@@ -44,10 +44,10 @@ you can use `apt-get` or `pip` to install them.
 ## The Daily Log
 
 ### Print Page
-It's not very convenient for you to haul your computer out to the garden every time you want to check the progress of your plants. For your convenience, you can print a list of your active plants and track their progress, then enter the info into PepperTrax.
+It's not very convenient for you to haul your computer out to the garden every time you want to check the progress of your customers. For your convenience, you can print a list of your active customers and track their progress, then enter the info into PepperTrax.
 
 ### Date
-Let's face it, we're all a little lazy when it comes to data entry. PepperTrax lets you enter logging information at your convenience. You can set the date for all plants at once by clicking the button at the top of the log.
+Let's face it, we're all a little lazy when it comes to data entry. PepperTrax lets you enter logging information at your convenience. You can set the date for all customers at once by clicking the button at the top of the log.
 
 ### Water
 

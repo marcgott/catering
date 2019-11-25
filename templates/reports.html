@@ -1,11 +1,11 @@
 {% include 'header.html' %}
 <h2 class="page_header"><i class="fas fa-{{icon[operation|lower]}}" style="margin-right:.2em"></i>Reports </h2>
 
-<div id="plant_details">
+<div id="customer_details">
 	<ul id="report_links">
-	<li><a href="#" id="height_report" class="reportlink"><i class="fas fa-{{icon['height']}}" style="margin-right:.2em"></i>Plant Height Report</a></li>
-	<li><a href="#" id="node_report" class="reportlink"><i class="fas fa-{{icon['height']}}" style="margin-right:.2em"></i>Plant Node Report</a></li>
-	<li><a href="#" id="transplant_report" class="reportlink"><i class="fas fa-{{icon['height']}}" style="margin-right:.2em"></i>Transplants Report</a></li>
+	<li><a href="#" id="height_report" class="reportlink"><i class="fas fa-{{icon['height']}}" style="margin-right:.2em"></i>Customer Height Report</a></li>
+	<li><a href="#" id="node_report" class="reportlink"><i class="fas fa-{{icon['height']}}" style="margin-right:.2em"></i>Customer Node Report</a></li>
+	<li><a href="#" id="transcustomer_report" class="reportlink"><i class="fas fa-{{icon['height']}}" style="margin-right:.2em"></i>Transcustomers Report</a></li>
 	</ul>
 </div>
 <div id="charts">
@@ -15,8 +15,8 @@
 <div id="chart_node_report" class="report chart">
 	<img src="data:image/png;base64,{{ comparison_chart.node_comparison }}"\>
 </div>
-<div id="chart_transplant_report" class="report chart">
-	<img src="data:image/png;base64,{{ comparison_chart.transplants }}"\>
+<div id="chart_transcustomer_report" class="report chart">
+	<img src="data:image/png;base64,{{ comparison_chart.transcustomers }}"\>
 </div>
 </div>
 

@@ -12,29 +12,29 @@ from wtforms import Form, TextField, SelectField, TextAreaField, validators, Str
 from tables import *
 from forms import *
 from gardentrax import get_measurement_plot,get_photo_base64
-operation="Plants"
+operation="Customer"
 icon="leaf"
 
 #
-# Show default plants page, general statistics
-@app.route('/plants')
-def show_plants():
+# Show default customers page, general statistics
+@app.route('/customers')
+def show_customers():
 	if check_login() is not True:
 		return redirect("/")
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT plant.id, plant.name as name, plant.gender, strain.name as strain_name, cycle.name as cycle_name,environment.name as current_environment, plant.source, plant.current_stage, plant.photo FROM plant LEFT JOIN strain on strain.id=plant.strain_ID LEFT JOIN cycle ON cycle.id=plant.cycle_ID LEFT JOIN environment ON environment.id=plant.current_environment ORDER BY plant.name ASC")
+		cursor.execute("SELECT customer.id, customer.name as name, customer.gender, strain.name as strain_name, menu.name as menu_name,product.name as current_product, customer.source, customer.current_stage, customer.photo FROM customer LEFT JOIN strain on strain.id=customer.strain_ID LEFT JOIN menu ON menu.id=customer.menu_ID LEFT JOIN product ON product.id=customer.current_product ORDER BY customer.name ASC")
 		rows = cursor.fetchall()
-		total_plants = len(rows)
+		total_customers = len(rows)
 
-		sql = "SELECT current_stage as name,count(current_stage) as count FROM plant GROUP BY current_stage"
+		sql = "SELECT current_stage as name,count(current_stage) as count FROM customer GROUP BY current_stage"
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
 		cursor.execute(sql)
 		stagecount = cursor.fetchall()
-		table = Plant(rows)
+		table = Customer(rows)
 		table.border = True
-		return render_template('main.html', table=table, total_count=total_plants, add_operation_url='.add_new_plant_view',icon=icon,stagecount=stagecount,operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
+		return render_template('main.html', table=table, total_count=total_customers, add_operation_url='.add_new_customer_view',icon=icon,stagecount=stagecount,operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
 	except Exception as e:
 		print(e)
 	finally:
@@ -43,9 +43,9 @@ def show_plants():
 
 
 #
-# Display and process new plant
-@app.route('/plant/new', methods=['GET','POST'])
-def add_new_plant_view():
+# Display and process new customer
+@app.route('/customer/new', methods=['GET','POST'])
+def add_new_customer_view():
 	if check_login() is not True:
 		return redirect("/")
 	icon=None
@@ -54,7 +54,7 @@ def add_new_plant_view():
 			_name = request.form['name']
 			_gender = request.form['gender']
 			_strain_ID = request.form['strain']
-			_cycle_ID = request.form['cycle']
+			_menu_ID = request.form['menu']
 			_source = request.form['source']
 			_grow_medium = request.form['grow_medium']
 			_photo = ''
@@ -66,40 +66,40 @@ def add_new_plant_view():
 				photo = base64.b64encode(photo_data.getvalue()).decode('utf8')
 				_photo = json.dumps({"mimetype":photo_data.mimetype, "data":photo})
 
-			sql = "INSERT INTO plant(name,gender,strain_ID,cycle_ID,source,grow_medium,photo) VALUES(%s, %s, %s, %s, %s, %s, %s)"
-			data = (_name, _gender, _strain_ID, _cycle_ID, _source, _grow_medium, _photo)
+			sql = "INSERT INTO customer(name,gender,strain_ID,menu_ID,source,grow_medium,photo) VALUES(%s, %s, %s, %s, %s, %s, %s)"
+			data = (_name, _gender, _strain_ID, _menu_ID, _source, _grow_medium, _photo)
 			conn = mysql.connect()
 			cursor = conn.cursor()
 			cursor.execute(sql, data)
 			conn.commit()
 			icon="leaf"
-			flash('New Plant Added!','info')
+			flash('New Customer Added!','info')
 		except Exception as e:
 			icon="remove"
-			flash('New Plant Not Added!','error')
+			flash('New Customer Not Added!','error')
 			print(e)
 
 	try:
-		form = PlantForm(request.form)
+		form = CustomerForm(request.form)
 	except Exception as e:
 		print(e)
 	title_verb = "Add"
-	return render_template('operation_form.html', formpage='add_plant.html', title_verb=title_verb, form=form, icon=icon, row=None, operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
+	return render_template('operation_form.html', formpage='add_customer.html', title_verb=title_verb, form=form, icon=icon, row=None, operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
 
 #
 # Edit
 ############################
-@app.route('/plant/edit/<int:id>', methods=['POST','GET'])
-def edit_plant(id):
+@app.route('/customer/edit/<int:id>', methods=['POST','GET'])
+def edit_customer(id):
 	if check_login() is not True:
 		return redirect("/")
 	icon=None
 	if request.method == "POST":
-		#form = PlantForm(request.form)
+		#form = CustomerForm(request.form)
 		_name = request.form['name']
 		_gender = request.form['gender']
 		_strain = request.form['strain']
-		_cycle = request.form['cycle']
+		_menu = request.form['menu']
 		_source = request.form['source']
 		_grow_medium = request.form['grow_medium']
 		_id = request.form['id']
@@ -112,28 +112,28 @@ def edit_plant(id):
 			photo = base64.b64encode(photo_data.getvalue()).decode('utf8')
 			_photo = json.dumps({"mimetype":photo_data.mimetype, "data":photo})
 
-		sql = "UPDATE plant SET name=%s, gender=%s, strain_ID=%s, cycle_ID=%s, source=%s, grow_medium=%s, photo=%s WHERE id=%s"
-		data = (_name, _gender, _strain, _cycle, _source, _grow_medium, _photo, _id)
+		sql = "UPDATE customer SET name=%s, gender=%s, strain_ID=%s, menu_ID=%s, source=%s, grow_medium=%s, photo=%s WHERE id=%s"
+		data = (_name, _gender, _strain, _menu, _source, _grow_medium, _photo, _id)
 		conn = mysql.connect()
 		cursor = conn.cursor()
 		cursor.execute(sql, data)
 		conn.commit()
 		icon="leaf"
-		flash('Plant updated successfully!','info')
+		flash('Customer updated successfully!','info')
 
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT * FROM plant WHERE id=%s", id)
+		cursor.execute("SELECT * FROM customer WHERE id=%s", id)
 		row = cursor.fetchone()
 		if row:
-			form = PlantForm(request.form)
+			form = CustomerForm(request.form)
 			form.name.default=row['name']
 			form.gender.default=row['gender']
 			form.source.default=row['source']
 			form.grow_medium.default=row['grow_medium']
 			form.strain.default=row['strain_ID']
-			form.cycle.default=row['cycle_ID']
+			form.menu.default=row['menu_ID']
 			form.photo.default=row['photo']
 			form.process()
 			#photodata = json.loads(row['photo'])
@@ -151,7 +151,7 @@ def edit_plant(id):
 			return 'Error loading #{id}'.format(id=id)
 
 		title_verb = "Edit"
-		return render_template('operation_form.html', formpage='add_plant.html', title_verb=title_verb, icon=icon, form=form, row=row, operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
+		return render_template('operation_form.html', formpage='add_customer.html', title_verb=title_verb, icon=icon, form=form, row=row, operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
 	except Exception as e:
 		print(e)
 	finally:
@@ -161,26 +161,26 @@ def edit_plant(id):
 #
 # delete
 ###################################
-@app.route('/plant/delete/<int:id>')
-def delete_plant(id):
+@app.route('/customer/delete/<int:id>')
+def delete_customer(id):
 	try:
 		conn = mysql.connect()
 		cursor = conn.cursor()
-		cursor.execute("DELETE FROM plant WHERE id=%s", (id,))
+		cursor.execute("DELETE FROM customer WHERE id=%s", (id,))
 		conn.commit()
-		flash('Plant deleted successfully!','info')
+		flash('Customer deleted successfully!','info')
 	except Exception as e:
 		print(e)
 	finally:
 		cursor.close()
 		conn.close()
-	return redirect("/plants")
+	return redirect("/customers")
 
 #
 # View
 ###################################
-@app.route('/plant/view/<int:id>')
-def view_plant(id):
+@app.route('/customer/view/<int:id>')
+def view_customer(id):
 	if check_login() is not True:
 		return redirect("/")
 	title_verb="View"
@@ -188,21 +188,21 @@ def view_plant(id):
 		option = get_settings()
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT plant.id, plant.name as name, plant.gender, strain.name as strain_name, cycle.name as cycle_name, plant.source, plant.grow_medium, environment.name as current_environment, plant.current_stage as current_stage, max(log.height) as current_height, max(log.span) as current_span FROM plant LEFT JOIN strain on strain.id=plant.strain_ID LEFT JOIN cycle ON cycle.id=plant.cycle_ID LEFT JOIN environment ON environment.id=plant.current_environment LEFT JOIN log ON plant.id=log.plant_ID WHERE plant.id=%s", (id,))
+		cursor.execute("SELECT customer.id, customer.name as name, customer.gender, strain.name as strain_name, menu.name as menu_name, customer.source, customer.grow_medium, product.name as current_product, customer.current_stage as current_stage, max(`order`.height) as current_height, max(`order`.span) as current_span FROM customer LEFT JOIN strain on strain.id=customer.strain_ID LEFT JOIN menu ON menu.id=customer.menu_ID LEFT JOIN product ON product.id=customer.current_product LEFT JOIN `order` ON customer.id=`order`.customer_ID WHERE customer.id=%s", (id,))
 		conn.commit()
 		row = cursor.fetchone()
 		row['current_span'] = 0 if row['current_span'] is None else row['current_span']
 		row['current_height'] = 0 if row['current_height'] is None else row['current_height']
 
-		cursor.execute("SELECT MIN( logdate ) as logdate, stage	FROM log WHERE plant_ID =%s	GROUP BY stage ORDER BY logdate", (id,))
+		cursor.execute("SELECT MIN( orderdate ) as logdate, stage	FROM `order` WHERE customer_ID =%s	GROUP BY stage ORDER BY orderdate", (id,))
 		conn.commit()
 		stages = cursor.fetchall()
 
-		cursor.execute("SELECT l.logdate,l.span,l.height,l.trim, min(md.logdate) as mindate FROM log l LEFT JOIN log md ON l.plant_ID=md.plant_ID WHERE (l.height<>0 OR l.span<>0 OR l.trim<>'') AND l.plant_ID=%s GROUP BY l.logdate ORDER BY l.logdate ASC", (id,))
+		cursor.execute("SELECT l.orderdate,l.span,l.height,l.trim, min(md.orderdate) as mindate FROM `order` l LEFT JOIN `order` md ON l.customer_ID=md.customer_ID WHERE (l.height<>0 OR l.span<>0 OR l.trim<>'') AND l.customer_ID=%s GROUP BY l.orderdate ORDER BY l.orderdate ASC", (id,))
 		conn.commit()
 		chart_rows = cursor.fetchall()
 
-		cursor.execute("SELECT DAY(logdate) as d, MONTH(logdate) as m FROM log WHERE Water=1 AND plant_ID=%s ORDER BY logdate ASC", (id,))
+		cursor.execute("SELECT DAY(orderdate) as d, MONTH(orderdate) as m FROM `order` WHERE Water=1 AND customer_ID=%s ORDER BY orderdate ASC", (id,))
 		conn.commit()
 		water_dates = cursor.fetchall()
 
@@ -225,9 +225,9 @@ def view_plant(id):
 			if i+1 >= len(stages):
 				nextdate = date.today()
 			else:
-				nextdate = stages[i+1]['logdate']
+				nextdate = stages[i+1]['orderdate']
 
-			stagetotal = nextdate - stage['logdate']
+			stagetotal = nextdate - stage['orderdate']
 			stage['stagetotal'] = stagetotal.days
 
 	except Exception as e:
@@ -236,10 +236,10 @@ def view_plant(id):
 		cursor.close()
 		conn.close()
 
-	return render_template("plants.html",water_chart=water_chart,growth_chart=growth_chart,icon=get_icons(),option=option,row=row,rows=stages,operation=operation,title_verb=title_verb,height_rank=height_rank['rank']+1,span_rank=span_rank['rank']+1,is_login=session.get('logged_in'))
+	return render_template("customers.html",water_chart=water_chart,growth_chart=growth_chart,icon=get_icons(),option=option,row=row,rows=stages,operation=operation,title_verb=title_verb,height_rank=height_rank['rank']+1,span_rank=span_rank['rank']+1,is_login=session.get('logged_in'))
 
-@app.route('/plant/logs/<int:id>')
-def show_plant_log(id):
+@app.route('/customer/logs/<int:id>')
+def show_customer_log(id):
 	if check_login() is not True:
 		return redirect("/")
 	try:
@@ -248,24 +248,24 @@ def show_plant_log(id):
 			offset = 0 + int(request.args.get('offset'))
 		conn = mysql.connect()
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		sql = "SELECT log.*, plant.name as plant_name, nutrient.name as nutrient_name, environment.name as environment_name, repellent.name as repellent_name FROM log LEFT JOIN plant ON plant.id = log.plant_ID LEFT JOIN nutrient ON nutrient.id = log.nutrient_ID LEFT JOIN environment ON environment.id = log.environment_ID LEFT JOIN repellent ON repellent.id = log.repellent_ID WHERE plant_ID=%d ORDER BY logdate DESC, ts DESC LIMIT %d,50" % (id,int(offset))
+		sql = "SELECT `order`.*, customer.name as customer_name, nutrient.name as nutrient_name, product.name as product_name, repellent.name as repellent_name FROM `order` LEFT JOIN customer ON customer.id = `order`.customer_ID LEFT JOIN nutrient ON nutrient.id = `order`.nutrient_ID LEFT JOIN product ON product.id = `order`.product_ID LEFT JOIN repellent ON repellent.id = `order`.repellent_ID WHERE customer_ID=%d ORDER BY orderdate DESC, ts DESC LIMIT %d,50" % (id,int(offset))
 		cursor.execute(sql)
 		rows = cursor.fetchall()
-		table = PlantLog(rows)
+		table = CustomerLog(rows)
 		table.border = True
-		table.plant_name.show=False
-		if isinstance( app.settings["allow_plantlog_edit"],(bool) ):
+		table.customer_name.show=False
+		if isinstance( app.settings["allow_customerlog_edit"],(bool) ):
 			table.edit.show=True
 			table.delete.show=True
 		else:
 			table.edit.show=False
 			table.delete.show=False
 		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		sql = "SELECT COUNT(*)as logcount from log where plant_ID=%d" % id
+		sql = "SELECT COUNT(*)as ordercount from `order` where customer_ID=%d" % id
 		cursor.execute(sql)
 		rowcount = cursor.fetchone()
 		returned_rows = len(rows)
-		return render_template('logs.html', offset=offset,table=table, icon=icon, plant_name=rows[0]['plant_name'], total_logs=rowcount['logcount'],returned_rows=returned_rows,operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
+		return render_template('orders.html', offset=offset,table=table, icon=icon, customer_name=rows[0]['customer_name'], total_logs=rowcount['ordercount'],returned_rows=returned_rows,operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
 	except Exception as e:
 		print(e)
 	finally:

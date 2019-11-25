@@ -4,7 +4,7 @@ import pymysql
 from app import app
 #from flask_table import Table
 from db_config import mysql
-import plants
+import customers
 import tables
 from flask import flash, render_template, request, redirect
 from werkzeug import generate_password_hash, check_password_hash

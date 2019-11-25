@@ -29,7 +29,7 @@ def show_reports():
 
         comparison_chart = {}
         # Height Comparison
-        sql = "select plant.name, plant.id, MAX(log.height) as measure, MAX(log.span) as span from log INNER JOIN plant on plant.id=log.plant_ID WHERE plant.current_stage NOT IN ('Archive','Dead') GROUP BY plant_ID ORDER BY measure,span"
+        sql = "select customer.name, customer.id, MAX(log.height) as measure, MAX(log.span) as span from log INNER JOIN customer on customer.id=log.customer_ID WHERE customer.current_stage NOT IN ('Archive','Dead') GROUP BY customer_ID ORDER BY measure,span"
         cursor.execute(sql)
         conn.commit()
         data = cursor.fetchall()
@@ -40,7 +40,7 @@ def show_reports():
         else:
             comparison_chart['height_comparison'] = get_photo_base64('data_not_available.png')
 
-        sql = "select plant.name, plant.id, MAX(log.nodes) as measure from log INNER JOIN plant on plant.id=log.plant_ID WHERE log.nodes > 0 AND plant.current_stage NOT IN ('Archive','Dead')GROUP BY plant_ID  ORDER BY measure"
+        sql = "select customer.name, customer.id, MAX(log.nodes) as measure from log INNER JOIN customer on customer.id=log.customer_ID WHERE log.nodes > 0 AND customer.current_stage NOT IN ('Archive','Dead')GROUP BY customer_ID  ORDER BY measure"
         cursor.execute(sql)
         conn.commit()
         data = cursor.fetchall()
@@ -51,15 +51,15 @@ def show_reports():
         else:
             comparison_chart['node_comparison'] = get_photo_base64('data_not_available.png')
 
-        sql = "select plant.name, plant.id, COUNT(log.transplant) as measure from log INNER JOIN plant on plant.id=log.plant_ID WHERE log.transplant > 0 AND plant.current_stage NOT IN ('Archive','Dead') GROUP BY plant_ID ORDER BY measure"
+        sql = "select customer.name, customer.id, COUNT(log.transcustomer) as measure from log INNER JOIN customer on customer.id=log.customer_ID WHERE log.transcustomer > 0 AND customer.current_stage NOT IN ('Archive','Dead') GROUP BY customer_ID ORDER BY measure"
         cursor.execute(sql)
         conn.commit()
         data = cursor.fetchall()
         if not all(data):
-            chart = get_comparison_chart(data,"Transplants","Number of Transplants")
-            comparison_chart['transplants'] = chart.decode('utf8')
+            chart = get_comparison_chart(data,"Transcustomers","Number of Transcustomers")
+            comparison_chart['transcustomers'] = chart.decode('utf8')
         else:
-            comparison_chart['transplants'] = get_photo_base64('data_not_available.png')  
+            comparison_chart['transcustomers'] = get_photo_base64('data_not_available.png')  
         return render_template("reports.html",comparison_chart=comparison_chart,icon=get_icons(),option=option,operation=operation,program_name=app.program_name,is_login=session.get('logged_in'))
     except Exception as e:
         print(e)

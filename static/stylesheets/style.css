@@ -35,7 +35,7 @@ li.error {list-style-type:none;border-left:4px solid #aa7788;background-color:#f
 .navigation_btn {color:#ffffff; padding:.5em;margin:0 .2em;background-color:#548727;border-radius:50%}
 .navigation_btn:hover {color:#ffffcc}
 .input {margin-bottom:.4em}
-#environment_log_form input[type=text]{max-width:3.5em;color:#000000}
+#product_log_form input[type=text]{max-width:3.5em;color:#000000}
 .log_row {vertical-align:top;background-color: #efefef;padding:.2em}
 .input.log {vertical-align:top;display:inline-block;min-width:5%}
 .input.log input[type=text] {display:inline-block!important;max-width:2.5em}
@@ -53,19 +53,19 @@ table.main.chart td {padding:0.4em}
 
 #global_lux{width:2.5em;color:#000000}
 
-#print_log,#print_environment{width:100%;margin-bottom:.5em}
+#print_log,#print_product{width:100%;margin-bottom:.5em}
 .box {width:50px;height:30px;padding-right:.5em;border:1px solid #000000;margin-right:.6em}
 #print_log td{min-width:6%;padding:.5em .25em}
 .printblank{width:6%;text-align:right;font-size:0.6em;vertical-align: bottom;}
 .printname{width:30%;}
 .printnotes{width:20%;}
 
-#plant_details {display:inline-block;width:20%;vertical-align: top;margin-top:2em;}
-#plant_growth_chart {display:inline-block;width:70%;vertical-align: top;margin-top:2em;}
-#plant_growth_chart img {width:80%;}
+#customer_details {display:inline-block;width:20%;vertical-align: top;margin-top:2em;}
+#customer_growth_chart {display:inline-block;width:70%;vertical-align: top;margin-top:2em;}
+#customer_growth_chart img {width:80%;}
 
-#plant_image {display:inline-block;vertical-align: top;max-width:200px;max-height:200px}
-#plant_image img{border-radius:400px;width:100%}
+#customer_image {display:inline-block;vertical-align: top;max-width:200px;max-height:200px}
+#customer_image img{border-radius:400px;width:100%}
 
 #daily_log th, table.main.chart th {background-color:#548727;padding:.01em;color:#ffffff}
 

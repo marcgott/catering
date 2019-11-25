@@ -48,10 +48,10 @@ def do_install_settings():
         _volume_units = request.form['volume_units']
         _latitude = request.form['latitude']
         _longitude = request.form['longitude']
-        _allow_plantlog_edit = "True" if 'allow_plantlog_edit' in request.form else ""
+        _allow_orders_edit = "True" if 'allow_orders_edit' in request.form else ""
         _allow_envlog_edit = "True" if 'allow_envlog_edit' in request.form else ""
-        settings_sql = "INSERT INTO `options` (`option_key`, `option_value`) VALUES('date_format', %s),('timezone', %s),('temp_units', %s),('length_units', %s),('volume_units', %s),('username', %s),('password', %s),('latitude', %s),('longitude', %s),('allow_plantlog_edit', %s),('allow_envlog_edit', %s);"
-        data = (_date_format,_timezone,_temp_units,_length_units,_volume_units,_username,_password,_latitude, _longitude, _allow_envlog_edit, _allow_plantlog_edit)
+        settings_sql = "INSERT INTO `options` (`option_key`, `option_value`) VALUES('date_format', %s),('timezone', %s),('temp_units', %s),('length_units', %s),('volume_units', %s),('username', %s),('password', %s),('latitude', %s),('longitude', %s),('allow_orders_edit', %s),('allow_envlog_edit', %s);"
+        data = (_date_format,_timezone,_temp_units,_length_units,_volume_units,_username,_password,_latitude, _longitude, _allow_envlog_edit, _allow_orders_edit)
         with connection.cursor() as cursor:
             cursor.execute(settings_sql,data)
             connection.commit()

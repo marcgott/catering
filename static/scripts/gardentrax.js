@@ -15,8 +15,8 @@ $(document).ready(function() {
                //
             });
             $( function() {
-              if( $('.environmentfield').val() == 0){
-                $('.environmentfield').addClass('missing')
+              if( $('.productfield').val() == 0){
+                $('.productfield').addClass('missing')
               }
               if( $('.stagefield').val() == 'None'){
                 $('.stagefield').addClass('missing')
@@ -34,9 +34,9 @@ $(document).ready(function() {
             $('#globalwater').click(function(){
               $('.watercheck').prop('checked',true);
             });
-            $('#global_environment_ID').on('change',function(){
-              $('.environmentfield').removeClass('missing')
-              $('.environmentfield').val($(this).val());
+            $('#global_product_ID').on('change',function(){
+              $('.productfield').removeClass('missing')
+              $('.productfield').val($(this).val());
             });
             $('#global_nutrient_ID').on('change',function(){
               $('.nutrientfield').val($(this).val());
@@ -62,26 +62,26 @@ $(document).ready(function() {
       isodate = date.toISOString().split('T')
       $('.datefield').val(isodate[0]);
     }
-    if($("#plant_strain").length){
+    if($("#customer_strain").length){
       $.get("/api/list/strain",function(data){
         data.sort(function(a,b){
           return a.name.localeCompare( b.name );
         })
-        $("#plant_strain select").empty()
+        $("#customer_strain select").empty()
           $.each(data, function(idx,obj){
-            $("#plant_strain select").append('<option value="'+obj.id+'">'+obj.name+'</option>')
+            $("#customer_strain select").append('<option value="'+obj.id+'">'+obj.name+'</option>')
             })
 
       })
     }
-    if($("#plant_cycle").length){
-      $.get("/api/list/cycle",function(data){
+    if($("#customer_menu").length){
+      $.get("/api/list/menu",function(data){
         data.sort(function(a,b){
           return a.name.localeCompare( b.name );
         })
-        $("#plant_cycle select").empty()
+        $("#customer_menu select").empty()
           $.each(data, function(idx,obj){
-            $("#plant_cycle select").append('<option value="'+obj.id+'">'+obj.name+'</option>')
+            $("#customer_menu select").append('<option value="'+obj.id+'">'+obj.name+'</option>')
             })
 
       })
